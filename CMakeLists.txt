@@ -1,0 +1,4 @@
+zephyr_library()
+
+zephyr_library_sources_ifdef(CONFIG_ZMK_BEHAVIOR_SENSOR_ATTR_CYCLE src/behavior_sensor_attr_cycle.c)
+zephyr_include_directories(${APPLICATION_SOURCE_DIR}/include)

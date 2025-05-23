@@ -1,0 +1,21 @@
+# Copyright (c) 2025, George Norton
+# SPDX-License-Identifier: MIT
+
+description: Sets a sensor attribute (e.g. a DPI value) by cycling through a list of values.
+
+compatible: "zmk,behavior-sensor-attr-cycle"
+
+include: zero_param.yaml
+
+properties:
+  sensor_device:
+    required: true
+    type: phandle
+  values:
+    required: true
+    type: array
+  attr:
+    required: true
+    type: int
+  persistant:
+    type: boolean

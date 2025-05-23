@@ -1,0 +1,6 @@
+name: zmk-behavior-sensor-attr-cycle
+build:
+  cmake: .
+  kconfig: Kconfig
+  settings:
+    dts_root: .
