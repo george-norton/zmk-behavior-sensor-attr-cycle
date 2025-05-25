@@ -11,11 +11,23 @@ properties:
   sensor_device:
     required: true
     type: phandle
+    description: The target sensor device to send set_attr commands to.
   values:
     required: true
     type: array
+    description: A list of values which will be cycled through.
   attr:
     required: true
     type: int
+    description: The attribute to modify.
   persistant:
     type: boolean
+    description: If enabled the state will be stored to flash memory and restored at power on. This required the settings feature to be enabled and configured.
+  save_delay:
+    default: 2000
+    type: int
+    description: The time to wait before saving to flash.
+  load_delay:
+    default: 0
+    type: int
+    description: A delay before settings loaded from flash are sent to the device. Some drivers may not expect to receive attributes before they have initialised.
