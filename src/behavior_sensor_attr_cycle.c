@@ -32,6 +32,33 @@ struct behavior_sensor_attr_cycle_persistant_state {
     uint8_t index;
 };
 
+#if IS_ENABLED(CONFIG_ZMK_BEHAVIOR_METADATA)
+
+static const struct behavior_parameter_value_metadata param_values[] = {
+    {
+        .display_name = "Next",
+        .type = BEHAVIOR_PARAMETER_VALUE_TYPE_VALUE,
+        .value = 1
+    },
+    {
+        .display_name = "Previous",
+        .type = BEHAVIOR_PARAMETER_VALUE_TYPE_VALUE,
+        .value = -1
+    }
+};
+
+static const struct behavior_parameter_metadata_set param_metadata_set[] = {{
+    .param1_values = param_values,
+    .param1_values_len = ARRAY_SIZE(param_values),
+}};
+
+static const struct behavior_parameter_metadata metadata = {
+    .sets_len = ARRAY_SIZE(param_metadata_set),
+    .sets = param_metadata_set,
+};
+
+#endif
+
 struct behavior_sensor_attr_cycle_data {
     const struct device *dev;
 #if IS_ENABLED(CONFIG_SETTINGS)
@@ -42,6 +69,7 @@ struct behavior_sensor_attr_cycle_data {
 };
 
 #if IS_ENABLED(CONFIG_SETTINGS)
+
 static void save_work_callback(struct k_work *work) {
     struct k_work_delayable *dwork = k_work_delayable_from_work(work);
     struct behavior_sensor_attr_cycle_data *data = CONTAINER_OF(dwork, struct behavior_sensor_attr_cycle_data, save_work);
@@ -63,6 +91,7 @@ static void load_work_callback(struct k_work *work) {
     struct sensor_value val = { val1: config->values[data->state.index], val2: 0 };
     sensor_attr_set(config->sensor_device, SENSOR_CHAN_ALL, config->attr, &val);
 }
+
 #endif
 
 static int behavior_sensor_attr_cycle_init(const struct device *dev) {
@@ -85,7 +114,7 @@ static int on_keymap_binding_pressed(struct zmk_behavior_binding *binding,
     const struct behavior_sensor_attr_cycle_config *config = dev->config;
 
     // Update the index, then send the new value to the sensor
-    data->state.index = (data->state.index + 1) % config->length;
+    data->state.index = (data->state.index + binding->param1) % config->length;
     struct sensor_value val = { val1: config->values[data->state.index], val2: 0 };
     sensor_attr_set(config->sensor_device, SENSOR_CHAN_ALL, config->attr, &val);
 
@@ -101,6 +130,9 @@ static int on_keymap_binding_pressed(struct zmk_behavior_binding *binding,
 
 static const struct behavior_driver_api behavior_sensor_attr_cycle_driver_api = {
     .binding_pressed = on_keymap_binding_pressed,
+#if IS_ENABLED(CONFIG_ZMK_BEHAVIOR_METADATA)
+    .parameter_metadata = &metadata,
+#endif // IS_ENABLED(CONFIG_ZMK_BEHAVIOR_METADATA)
 };
 
 #define CYCLE_INST(n)                                                                              \

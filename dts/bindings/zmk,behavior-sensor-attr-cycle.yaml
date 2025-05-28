@@ -5,7 +5,7 @@ description: Sets a sensor attribute (e.g. a DPI value) by cycling through a lis
 
 compatible: "zmk,behavior-sensor-attr-cycle"
 
-include: zero_param.yaml
+include: one_param.yaml
 
 properties:
   sensor_device:
