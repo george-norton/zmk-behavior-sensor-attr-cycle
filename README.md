@@ -14,6 +14,8 @@ See and example in my [Ploopy mouse keymap](https://github.com/george-norton/zmk
 
 The `attr` value is driver specific, sensor drivers provide a `set_attr` function ([like this](https://github.com/george-norton/zmk-driver-pmw3360/blob/0dfa2f0411b795613a35f222f993e45a1e4cc32a/drivers/input/input_pmw3360.c#L365)), this allows runtime modification of certain attributes. Only things exposed through this API are modifiable by this behavior.
 
+Persisting to flash requires that you have configured your board to work with the settings API. You will need a storage flash partition and a bunch of config options enabled. If your board supports ZMK studio, you probably have all this setup already.
+
 ## TODO
 
 - Configurable channels?
